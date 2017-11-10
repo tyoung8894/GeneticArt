@@ -38,13 +38,13 @@ public class Randomize extends Algorithm
     	//Random random = new PredictablyRandom();
     	//random.nextDouble();
     	
-    	if(random.nextDouble()<rate){
+    	if(random.nextDouble()<=rate){
     		//return 1-argument expression with a random child
     		Expression zeroArg = makeZeroArgumentExpression();
     		rate = rate*1.33;
     		return zeroArg;
     	}
-    	else if(random.nextDouble()<rate){
+    	else if(random.nextDouble()<=rate){
     		Expression oneArg = makeOneArgumentExpression(apply(rate));
     		rate = rate*1.33;
     		return oneArg;
@@ -71,12 +71,10 @@ public class Randomize extends Algorithm
      */
     public Expression randomReplaceBase (Expression left, Expression right, double rate)
     {
-    
-    	
-    	if(random.nextDouble()<rate){
+    	if(random.nextDouble()<=rate){
     		return makeZeroArgumentExpression();
     	}
-    	else if(random.nextDouble()<rate){
+    	else if(random.nextDouble()<=rate){
     		return makeOneArgumentExpression(left);
     	}
     	else{

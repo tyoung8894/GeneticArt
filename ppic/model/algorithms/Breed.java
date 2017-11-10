@@ -1,5 +1,7 @@
 package ppic.model.algorithms;
 
+import java.util.Random;
+
 import ppic.model.*;
 import ppic.model.operators.APPExtImage;
 import ppic.util.Reflection;
@@ -35,7 +37,7 @@ public class Breed extends Algorithm
 			if(random.nextDouble() <= rate) {
 				return mom.copy();
 			}
-			if(random.nextDouble() <= 1-rate){
+			if(random.nextDouble() <= (1-rate)){
 				return dad.copy();
 			}
 
@@ -43,36 +45,53 @@ public class Breed extends Algorithm
 		if(random.nextDouble()<=rate){
 			return splice(dad, mom, rate);
 		}
-		if(random.nextDouble()<=1-rate){
+		else{
 			return splice(mom, dad, rate);
 		}
 
 	}
 
 	public Expression splice(Expression p1, Expression p2, double rate){
-
+		Random randomGen = new Random();
+		Expression p2Part = p2;
 		if(random.nextDouble() <= rate) {
 			if (p2.getLeft() != null) {
-				Expression p2Part = p2.getLeft().copy();
+				p2Part = p2.getLeft();
 			}
 		}
-		else if(random.nextDouble() <= rate){
+		if(random.nextDouble() <= rate){
 			if(p2.getRight() != null){
-				Expression p2Part = p2.getRight().copy();
+				p2Part = p2.getRight();
 			}
 		}
 		else{
-			Expression p2Part = p2.copy();
+			p2Part = p2.copy();
 		}
-		if(random.nextDouble()<= rate ||p1.getLeft() == null && p1.getRight() == null){
+
+		//Splice
+		if(random.nextDouble()<= rate ||(p1.getLeft() == null) && (p1.getRight() == null)){
 			return p1.copy();
 		}
-		if(p1.getLeft() != null & p1.getRight() != null){
-			
+		//if p1 has one child
+		if(p1.getDegree() == 1){
+			Expression p1Copy = p1.copy();
+			p1Copy.setLeft(p2Part);
+			return p1Copy;
 		}
+		//if p1 has two children
 		else{
-			
+		int randomInt = randomGen.nextInt(2);
+		if(randomInt == 0){
+			Expression p1Copy = p1.copy();
+			p1Copy.setLeft(p2Part);
+			return p1Copy;
 		}
+		
+		Expression p1Copy = p1.copy();
+		p1Copy.setRight(p2Part);
+		return p1Copy;
+		}
+
 	}		
 
 }

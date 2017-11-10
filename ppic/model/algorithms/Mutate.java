@@ -9,7 +9,7 @@ import ppic.model.operators.PPConstant;
 public class Mutate extends Algorithm
 {
   
-   
+	
     /*
      * Pseudocode for mutating:
      * apply (ex, rate):
@@ -36,47 +36,78 @@ public class Mutate extends Algorithm
    
     public Expression apply (Expression expr, double rate)
     {
+    	Random randomInt = new Random();
+    
     	Randomize randomize = new Randomize();
-
-    	
-    	if(random.nextDouble() < rate){
+    	if(random.nextDouble() <= rate){
     		Expression copy = expr.copy();
         	return copy;
     	}
+    	//if no children
     	else{
     		if(expr.getLeft() == null && expr.getRight() == null){
-    			
-    			Expression random = randomize.apply(rate);
-    			mutateConstant(expr);
-    		}
-    		if(expr.getLeft()!=null && expr.getRight()!=null){
-    			expr.copy();
-    			expr.getLeft().copy();
-    			expr.getRight().copy();
-    			randomize.randomReplaceBase(expr.getLeft(),expr.getRight(),rate);
-    			randomize.randomReplaceBase(expr.getRight(), expr.getLeft(), rate);
-    		}
-    		if(expr.getLeft() != null || expr.getRight() != null){
-    			expr.copy();
-    			//return a copy of the child of the expression
-    			if(expr.getLeft() != null){
-    				return expr.getLeft().copy();
+    			int nextInt = randomInt.nextInt(2);
+    			if(nextInt == 1){
+    				Expression random = randomize.apply(rate);
+    				return random;
     			}
     			else{
-    				return expr.getRight().copy();
+    				Expression mutateConstant = mutateConstant(expr);
+    				return mutateConstant;
+    		}
+    		}
+    		//if 2 children	
+    		if(expr.getLeft()!=null && expr.getRight()!=null){
+    			int nextInt = randomInt.nextInt(5);
+    			if(nextInt == 1){
+    			expr.copy();
     			}
-
+    			if(nextInt == 2){
+    			expr.getLeft().copy();
+    			}
+    			if(nextInt == 3){
+    			expr.getRight().copy();
+    			}
+    			if(nextInt == 4){
+    			randomize.randomReplaceBase(expr.getLeft(),expr.getRight(),rate);
+    			}
+    			if(nextInt == 5){
+    			randomize.randomReplaceBase(expr.getRight(), expr.getLeft(), rate);
+    			}
+    		}
+    		//if 1 child
+    		else{
+    			int nextInt = randomInt.nextInt(6);
+    			if(nextInt == 1){
+    			return expr.copy();
+    			}
+    			if(nextInt == 2){
+    			//return a copy of the child of the expression
+    				if(expr.getLeft() != null){
+    					return expr.getLeft().copy();
+    				}
+    				if(expr.getRight() != null){
+    					return expr.getRight().copy();
+    				}
+    			}
+    			if(nextInt == 3){
     			//base of ex and entirely new child
-    			Expression copy = expr.copy();
-    			
-    			
+    			Expression randomChild = randomize.apply(rate);
+    			expr.setLeft(randomChild);
+    			return expr;
+    			}
+    			if(nextInt == 4){
     			//random base and ex as child
     			randomize.makeOneArgumentExpression(expr);
-    			
+    			}
+    			if(nextInt == 5){
     			//2 arg expression with random base and right child and expr as left child
     			randomize.makeTwoArgumentExpression(expr, randomize.apply(rate));
+    			}
+    			if(nextInt == 6){
     			//2 arg expression with random base and left child and ex as right child
     			randomize.makeTwoArgumentExpression(randomize.apply(rate), expr);
+    			}
     		}
     	}
        return null;
