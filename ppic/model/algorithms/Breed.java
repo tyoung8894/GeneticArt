@@ -34,32 +34,38 @@ public class Breed extends Algorithm
 	public Expression apply (Expression mom, Expression dad, double rate)
 	{
 		if (mom.equals(dad)){
-			if(random.nextDouble() <= rate) {
+			double randDecimal = random.nextDouble();
+			if(randDecimal < rate) {
 				return mom.copy();
 			}
-			if(random.nextDouble() <= (1-rate)){
+			//double nextRand = random.nextDouble();
+			else{
 				return dad.copy();
 			}
 
 		}
-		if(random.nextDouble()<=rate){
-			return splice(dad, mom, rate);
-		}
-		else{
+		else {
+			double randDecimal = random.nextDouble();
+			if(randDecimal < rate){
+				return splice(dad, mom, rate);
+			}
+			//double nextRand = random.nextDouble();
+			//if(nextRand < (1-rate)){
 			return splice(mom, dad, rate);
 		}
-
+			
 	}
 
 	public Expression splice(Expression p1, Expression p2, double rate){
-		Random randomGen = new Random();
 		Expression p2Part = p2;
-		if(random.nextDouble() <= rate) {
+		double randDecimal = random.nextDouble();
+		if(randDecimal < rate) {
 			if (p2.getLeft() != null) {
 				p2Part = p2.getLeft();
 			}
 		}
-		if(random.nextDouble() <= rate){
+		double nextRand = random.nextDouble();
+		if(nextRand < rate){
 			if(p2.getRight() != null){
 				p2Part = p2.getRight();
 			}
@@ -69,7 +75,8 @@ public class Breed extends Algorithm
 		}
 
 		//Splice
-		if(random.nextDouble()<= rate ||(p1.getLeft() == null) && (p1.getRight() == null)){
+		double randSplice = random.nextDouble();
+		if(randSplice < rate ||(p1.getLeft() == null) && (p1.getRight() == null)){
 			return p1.copy();
 		}
 		//if p1 has one child
@@ -80,16 +87,16 @@ public class Breed extends Algorithm
 		}
 		//if p1 has two children
 		else{
-		int randomInt = randomGen.nextInt(2);
-		if(randomInt == 0){
+			int randomInt = random.nextInt(1);
+			if(randomInt == 0){
+				Expression p1Copy = p1.copy();
+				p1Copy.setLeft(p2Part);
+				return p1Copy;
+			}
+
 			Expression p1Copy = p1.copy();
-			p1Copy.setLeft(p2Part);
+			p1Copy.setRight(p2Part);
 			return p1Copy;
-		}
-		
-		Expression p1Copy = p1.copy();
-		p1Copy.setRight(p2Part);
-		return p1Copy;
 		}
 
 	}		

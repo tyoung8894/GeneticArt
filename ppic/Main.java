@@ -3,7 +3,12 @@ package ppic;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 
+import ppic.model.*;
+
 import ppic.model.Algorithm;
+import ppic.model.algorithms.Breed;
+import ppic.model.algorithms.Mutate;
+import ppic.model.algorithms.Randomize;
 import ppic.util.PredictablyRandom;
 import ppic.view.JPictureBrowser;
 
@@ -17,8 +22,9 @@ public class Main
     public static void main (String args[])
     {
         // Comment out if you are not testing.
-       // Algorithm.setRandom(new PredictablyRandom());
-
+        Algorithm.setRandom(new PredictablyRandom());
+    	
+    	
         JFrame frame = new JFrame(TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(new JPictureBrowser(frame));
